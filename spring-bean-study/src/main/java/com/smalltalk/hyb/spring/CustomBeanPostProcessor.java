@@ -1,24 +1,23 @@
 package com.smalltalk.hyb.spring;
 
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 
-public class CustomBeanPostProcessor implements BeanFactoryPostProcessor {
+public class CustomBeanPostProcessor implements BeanPostProcessor {
 
-    public CustomBeanPostProcessor() {
-        super();
-        System.out.println(" BeanFactoryPostProcessor实现类构造器");
+
+    public CustomBeanPostProcessor(){
+        System.out.println("这是BeanPostProcessor 实现类构造器！！！");
     }
 
+    public Object  postProcessBeforeInitialization(Object  o ,String s) throws BeansException{
+        System.out.println("BeanPostProcessor接口方法postProcesssBeforeInitialization 对属性进行更改");
+        return o;
+    }
 
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
-        System.out.println("BeanFacotryPostProcessor调用postProcessBeanFactory方法");
-
-        BeanDefinition beanDefinition = configurableListableBeanFactory.getBeanDefinition("orderInfo");
-
-        beanDefinition.getPropertyValues().addPropertyValue("price", "100.00");
+    public Object  postProcessAfterInitialization(Object  o,String s) throws  BeansException{
+        System.out.println("BeanPostProcessor接口方法postProcessAfterInitialization对属性进行更改");
+        return o;
     }
 
 }

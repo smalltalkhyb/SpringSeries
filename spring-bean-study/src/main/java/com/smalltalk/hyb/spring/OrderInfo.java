@@ -79,6 +79,12 @@ public class OrderInfo implements BeanFactoryAware, BeanNameAware, InitializingB
     }
 
 
+    @Override
+    public String toString() {
+        return String.format("OrderInfo: id=%s,name=%s,price=%s", id, name, price);
+    }
+
+
 }
 
 
