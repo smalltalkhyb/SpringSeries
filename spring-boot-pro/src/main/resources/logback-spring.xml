@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <springProperty name="appName" scope="context" source="spring.application.name"/>
+    <property name="log.path" value="logs/${appName}.log"/>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%date {yyyy-MM-dd HH:mm:ss} | %highlight(%-5level) | %boldYellow(%thread) | %boldGreen(%logger) | %msg%n"/>
+
+    <property name="MDC_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %boldYellow([%thread]) %highlight(%-5level) %boldGreen(%logger{50})  %line  ---requestId:%X{requestId}|appName:${appName}|code:%X{code}|remoteIp:%X{remoteIp}|uri:%X{uri}|requestParams:%X{requestParams}|%msg%n"/>
+
+    <!--输出到控制台-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+             <level>ERROR</level>
+         </filter>-->
+        <encoder>
+            <!--<pattern>${CONSOLE_LOG_PATTERN}</pattern>-->
+            <pattern>${MDC_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--输出到文件-->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}</file>
+        <Append>true</Append>
+        <prudent>false</prudent>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}  %line - %msg%n</pattern>-->
+            <pattern>${MDC_LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--归档日志文件名-->
+            <fileNamePattern>${log.path}.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!--日志文件保留个数-->
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+
+    <!-- 测试环境+开发环境. 多个使用逗号隔开. -->
+    <springProfile name="local">
+        <logger name="com.sayabc.online" level="debug"/>
+        <logger name="org.springframework" level="info"/>
+        <root level="debug">
+            <appender-ref ref="console"/>
+        </root>
+
+    </springProfile>
+    <!-- 测试环境+开发环境. 多个使用逗号隔开. -->
+    <springProfile name="dev">
+        <logger name="com.sayabc.online" level="debug"/>
+        <logger name="org.springframework" level="info"/>
+        <root level="debug">
+            <appender-ref ref="console"/>
+            <appender-ref ref="file"/>
+        </root>
+
+    </springProfile>
+    <!-- 测试环境+开发环境. 多个使用逗号隔开. -->
+    <springProfile name="test">
+        <logger name="com.sayabc.online" level="debug"/>
+        <logger name="org.springframework" level="info"/>
+        <root level="debug">
+            <appender-ref ref="console"/>
+            <appender-ref ref="file"/>
+        </root>
+
+    </springProfile>
+    <!-- 预生产环境. -->
+    <springProfile name="pre">
+        <logger name="com.sayabc.online" level="info"/>
+        <root level="info">
+            <appender-ref ref="console"/>
+            <appender-ref ref="file"/>
+        </root>
+    </springProfile>
+    <!-- 生产环境. -->
+    <springProfile name="production">
+        <logger name="com.sayabc.online" level="info"/>
+        <root level="info">
+            <appender-ref ref="console"/>
+            <appender-ref ref="file"/>
+        </root>
+    </springProfile>
+    <!-- 生产环境. -->
+    <springProfile name="prod">
+        <logger name="com.sayabc.online" level="info"/>
+        <root level="info">
+            <appender-ref ref="console"/>
+            <appender-ref ref="file"/>
+        </root>
+    </springProfile>
+</configuration>
+
+
