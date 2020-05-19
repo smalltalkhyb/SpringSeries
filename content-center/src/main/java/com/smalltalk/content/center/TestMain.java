@@ -16,15 +16,15 @@ public class TestMain {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         JSONObject subJson = new JSONObject();
         subJson.put("add_wechatwork", "是");
-        multiValueMap.set("exts", subJson.toJSONString().replace("\\", ""));
+        //multiValueMap.set("exts", subJson.toJSONString().replace("\\", ""));
 
 //        Map<String, String> ext = new HashMap<>(10);
 //        ext.put("add_wechatwork", "是");
 //        multiValueMap.set("exts", "{'add_wechatwork':'是'}");
-        multiValueMap.set("name", "滨岩");
+        multiValueMap.set("name", "范志远");
 
 
-        multiValueMap.set("union_id", "oBB9psw-RBixgXmFMtfDJELaFfMI");
+        multiValueMap.set("union_id", "oBB9ps1lkC4v6KwIFfXbHuIkPQX8");
         multiValueMap.set("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
         multiValueMap.forEach((k, v) -> {
             if (v == null || StringUtils.isEmpty(v.toString())) {
@@ -32,7 +32,7 @@ public class TestMain {
             }
         });
 
-        multiValueMap.set("sign", SignUtil.sign(multiValueMap.toSingleValueMap(), "63207064-f6af-430d-898c-d409532966b5"));
+        multiValueMap.set("sign", SignUtil.sign(multiValueMap.toSingleValueMap(), "c62ffacc-f368-4d27-9a2e-7c8f1446f4bf"));
 
         JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(multiValueMap.toSingleValueMap()));
 
