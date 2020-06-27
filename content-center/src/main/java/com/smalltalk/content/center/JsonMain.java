@@ -29,12 +29,15 @@ public class JsonMain {
 //        System.out.println(json2);
 
 
-        Map<String, String> json = JsonUtils.fromJson(str2, Map.class);
+//        Map<String, String> json = JsonUtils.fromJson(str2, Map.class);
+//
+//        System.out.println(json);
+//
+//        JSONObject contentJsonObj = new JSONObject(strObject);
+//
+//        System.out.println(contentJsonObj);
 
-        System.out.println(json);
 
-        JSONObject contentJsonObj = new JSONObject(strObject);
-
-        System.out.println(contentJsonObj);
+        System.out.println("1100xxx".substring(0,4));
     }
 }
