@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: flyflow-study
+  datasource:
+    url: jdbc:mysql://your-mysql-host:3306/flyflow_leave?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
+    username: your-username
+    password: your-password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+# Flowable ???? (????? FlyFlow/Flowable ??)
+flowable:
+  async-executor-activate: false
+  database-schema-update: true

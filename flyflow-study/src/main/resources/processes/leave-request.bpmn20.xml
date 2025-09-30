@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:flowable="http://flowable.org/bpmn"
+             targetNamespace="http://www.flowable.org/processdef">
+
+    <process id="leaveRequest" name="请假审批流程" isExecutable="true">
+
+        <!-- 开始事件 -->
+        <startEvent id="startEvent" name="请假开始"/>
+        <sequenceFlow sourceRef="startEvent" targetRef="submitLeaveTask"/>
+
+        <!-- 员工提交请假申请 (用户任务) -->
+        <userTask id="submitLeaveTask" name="提交请假申请" flowable:assignee="${applicant}">
+            <extensionElements>
+                <!-- 可根据需要配置表单或候选组 -->
+            </extensionElements>
+        </userTask>
+        <sequenceFlow sourceRef="submitLeaveTask" targetRef="managerApproveTask"/>
+
+        <!-- 经理审批 (用户任务) -->
+        <userTask id="managerApproveTask" name="经理审批" flowable:candidateGroups="managers"/>
+        <sequenceFlow sourceRef="managerApproveTask" targetRef="decisionGateway"/>
+
+        <!-- 排他网关 (根据审批结果决策) -->
+        <exclusiveGateway id="decisionGateway" name="审批决定"/>
+
+        <!-- 批准流程 -->
+        <sequenceFlow sourceRef="decisionGateway" targetRef="sendApproveNotifyTask">
+            <conditionExpression xsi:type="tFormalExpression">${approved == true}</conditionExpression>
+        </sequenceFlow>
+
+        <!-- 拒绝流程 -->
+        <sequenceFlow sourceRef="decisionGateway" targetRef="sendRejectNotifyTask">
+            <conditionExpression xsi:type="tFormalExpression">${approved == false}</conditionExpression>
+        </sequenceFlow>
+
+        <!-- 批准通知 (服务任务，可触发邮件、消息等) -->
+        <serviceTask id="sendApproveNotifyTask" name="发送批准通知" flowable:class="com.example.flyflow.service.SendApproveNotificationDelegate"/>
+        <sequenceFlow sourceRef="sendApproveNotifyTask" targetRef="recordResultTask"/>
+
+        <!-- 记录结果 (用户任务，可选) -->
+        <userTask id="recordResultTask" name="记录请假结果" flowable:assignee="${applicant}"/>
+        <sequenceFlow sourceRef="recordResultTask" targetRef="endEvent"/>
+
+        <!-- 拒绝通知 (服务任务) -->
+        <serviceTask id="sendRejectNotifyTask" name="发送拒绝通知" flowable:class="com.example.flyflow.service.SendRejectNotificationDelegate"/>
+        <sequenceFlow sourceRef="sendRejectNotifyTask" targetRef="endEvent"/>
+
+        <!-- 结束事件 -->
+        <endEvent id="endEvent" name="请假流程结束"/>
+    </process>
+</definitions>
